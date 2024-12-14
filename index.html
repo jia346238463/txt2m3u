@@ -53,69 +53,69 @@ margin-top: 5px;
 background-color: #fff;
 color: #333;
 }
- #版权 {
- 最高的 : 20 Px ;
-颜色 : #666;
- 字体尺寸 : 12 Px ;
+#copyright {
+margin-top: 20px;
+color: #666;
+font-size: 12px;
 }
-</ 风格 >
-</ 头 >
-< 身体 >
-< h2 > 在线TXT转M3U格式 </ h2 >
- < h3 > TXT格式源: </ h3 >
- < 分 身份证 = "inputContainer" >
- 文本标识= "txtInput" 行= "10" 科尔斯= "80" ></textarea>
+</style>
+</head>
+<body>
+<h2>在线TXT转M3U格式</h2>
+<h3>TXT格式源:</h3>
+<div id="inputContainer">
+<textarea id="txtInput" rows="10" cols="80"></textarea>
 </div>
- 点击按钮= "convertToM3U()" >转换格式</button>
- 点击按钮= "clearScreen()" >清除屏幕</button>
- 点击按钮= "copyContent()" >拷贝结果</button>
- 点击按钮= "saveAsM3U()" >保存m3u</button>
- <h3>M3U格式转换结果:</ h3 >
- 文本标识= "m3uOutput" 行= "10" 科尔斯= "80" 只读&t;&l;/纺织亚&t;
-脚本&t;
- 功能 变底3U ( )  {
- 康斯特·特斯顿普德=文件。 ( 'txtInput' ) .value;
- 切线= 切线。 ( '\n' ) ;
- 让M3u输出= '#EXTM3U\n' ;
-让曲线组=空;
-  为了 ( 直线线 )  {
- 康斯特特姆迈德林=线。 ( ) ;
- 如果 ( trimmedLine !== '' )  {
- 如果 ( 特林麦迪林 . 包括 (       '#genre#'       )       )      {
- 科伦特集团 替换。 ( /,#genre#/, ''     ) .修剪 (    ) ;
-   } 其他的 {
- 康斯特 原渠道名称 [ = 修剪线。分叉channelLink ]
- 替换/替换 ( 中央电视台|Cetv ) - ( \d+ )
-专题小组名称=专题小组"http://192.168.2.1:8888/diyp/logo/${processedChannelName}.png"
-if  
-
+<button onclick="convertToM3U()">转换格式</button>
+<button onclick="clearScreen()">清除屏幕</button>
+<button onclick="copyContent()">拷贝结果</button>
+<button onclick="saveAsM3U()">保存m3u</button>
+<h3>M3U格式转换结果:</h3>
+<textarea id="m3uOutput" rows="10" cols="80" readonly></textarea>
+<script>
+function convertToM3U() {
+const txtInput = document.getElementById('txtInput').value;
+const lines = txtInput.split('\n');
+let m3uOutput = '#EXTM3U\n';
+let currentGroup = null;
+for (const line of lines) {
+const trimmedLine = line.trim();
+if (trimmedLine !== '') {
+if (trimmedLine.includes('#genre#')) {
+currentGroup = trimmedLine.replace(/,#genre#/, '').trim();
+} else {
+const [originalChannelName, channelLink] = trimmedLine.split(',').map(item => item.trim());
+const processedChannelName = originalChannelName.replace(/(CCTV|CETV)-(\d+).*/, '$1$2');
+m3uOutput += `#EXTINF:-1 tvg-name="${processedChannelName}" tvg-logo="http://192.168.2.1:8888/diyp/logo/${processedChannelName}.png"`;
+if (currentGroup) {
+m3uOutput += ` group-title="${currentGroup}"`;
 }
-
+m3uOutput += `,${originalChannelName}\n${channelLink}\n`;
 }
 }
 }
-
+document.getElementById('m3uOutput').value = m3uOutput;
 }
-功能屏幕
-
-
+function clearScreen() {
+document.getElementById('txtInput').value = '';
+document.getElementById('m3uOutput').value = '';
 }
-function copyContent 
-const m3uOutput = document.getElementById
-
-
-alert
+function copyContent() {
+const m3uOutput = document.getElementById('m3uOutput');
+m3uOutput.select();
+document.execCommand('copy');
+alert('内容已复制到剪贴板！');
 }
-function saveAsM3U 
-  
-不满意的   类型 :    
-    康斯特 =文件。 (   'a'  ) ;康斯特  A = document. 创造元素   
-
- ;
+function saveAsM3U() {
+const m3uContent = document.getElementById('m3uOutput').value;
+const blob = new Blob([m3uContent], { type: 'text/plain' });
+const a = document.createElement('a');
+a.href = URL.createObjectURL(blob);
+a.download = 'playlist.m3u';
 document.body.appendChild(a);
 a.click();
 document.body.removeChild(a);
 }
 </script>
 </body>
-  </html>
+</html>
